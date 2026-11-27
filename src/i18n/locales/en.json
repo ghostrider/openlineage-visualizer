@@ -36,5 +36,16 @@
     "expandUpstream_other": "Show the {{count}} data products that feed this one",
     "expandDownstream_one": "Show the data product that uses this one",
     "expandDownstream_other": "Show the {{count}} data products that use this one"
+  },
+  "drop": {
+    "hint": "Drop OpenLineage JSON files to add them",
+    "empty": "Drop OpenLineage JSON or NDJSON files here",
+    "noLineage": "No lineage events",
+    "added_one": "Added {{events}} events from 1 file.",
+    "added_other": "Added {{events}} events from {{count}} files.",
+    "failed": "Could not read OpenLineage events from {{names}}.",
+    "files_one": "1 dropped file",
+    "files_other": "{{count}} dropped files",
+    "clear": "Clear"
   }
 }

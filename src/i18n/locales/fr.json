@@ -36,5 +36,16 @@
     "expandUpstream_other": "Afficher les {{count}} data products qui alimentent celui-ci",
     "expandDownstream_one": "Afficher le data product qui utilise celui-ci",
     "expandDownstream_other": "Afficher les {{count}} data products qui utilisent celui-ci"
+  },
+  "drop": {
+    "hint": "Déposez des fichiers JSON OpenLineage pour les ajouter",
+    "empty": "Déposez ici des fichiers JSON ou NDJSON OpenLineage",
+    "noLineage": "Aucun événement de lignage",
+    "added_one": "{{events}} événements ajoutés depuis 1 fichier.",
+    "added_other": "{{events}} événements ajoutés depuis {{count}} fichiers.",
+    "failed": "Impossible de lire des événements OpenLineage dans {{names}}.",
+    "files_one": "1 fichier déposé",
+    "files_other": "{{count}} fichiers déposés",
+    "clear": "Effacer"
   }
 }

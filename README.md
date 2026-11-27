@@ -34,6 +34,17 @@ Two more sets of events: `public/test-events-platforms.json` (a chain across Kaf
 Starburst) and `public/test-events-fabric.json` (OneLake tables and Power BI items as the Fabric import of Entropy
 Data stores them). Point `data-json-url` at them to try them.
 
+### Dropping files
+
+With `data-file-drop` on the container, OpenLineage files dragged onto the browser window are added to the graph:
+a JSON array of events, a single event, `{ "events": [...] }` or NDJSON. Several files can be dropped at once and
+dropped again later; **Clear** removes them. Without `data-json-url` the visualizer starts empty and waits for files.
+`index.html` turns it on:
+
+```html
+<div id="openlineage-visualizer" data-json-url="/test-events.json" data-height="500px" data-file-drop></div>
+```
+
 ## Node labels and platforms
 
 A node shows the part of its name a reader recognises, following the

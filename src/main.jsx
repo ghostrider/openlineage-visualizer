@@ -4,7 +4,7 @@ import { I18nextProvider } from 'react-i18next';
 import App from './App';
 import MultiApp from './MultiApp';
 import i18n from './i18n';
-import { parseResponse } from './lineage';
+import { parseLineage } from './lineage';
 import { IconBaseUrlContext } from './IntegrationIcon';
 import './index.css';
 
@@ -24,24 +24,35 @@ function applyLocale(locale) {
 // swap issues another lineage fetch and calls createRoot on a live root.
 const mountedContainers = new WeakSet();
 
+// `data-file-drop` lets OpenLineage files dragged onto the browser window be added to the graph. With it the
+// container mounts even without data-json-url, waiting for files to be dropped.
+function fileDropEnabled(container) {
+  const v = container.dataset.fileDrop;
+  return v !== undefined && v !== 'false';
+}
+
 function mountSingle(container) {
   const jsonUrl = container.dataset.jsonUrl;
   const height = container.dataset.height || '400px';
-  if (!jsonUrl) return;
+  const fileDrop = fileDropEnabled(container);
+  if (!jsonUrl && !fileDrop) return;
   if (mountedContainers.has(container)) return;
   mountedContainers.add(container);
 
-  fetch(jsonUrl, { credentials: 'same-origin' })
-    .then((res) => res.text())
-    .then((text) => {
-      const data = parseResponse(text);
-      if (!data.graph || data.graph.length === 0) return;
+  const load = jsonUrl
+    ? fetch(jsonUrl, { credentials: 'same-origin' }).then((res) => res.text()).then(parseLineage)
+    : Promise.resolve({ events: [] });
+
+  load
+    .then((initial) => {
+      const empty = initial.graph ? initial.graph.length === 0 : initial.events.length === 0;
+      if (empty && !fileDrop) return;
       container.style.height = height;
       applyLocale(container.dataset.locale);
       createRoot(container).render(
         <I18nextProvider i18n={i18n}>
           <IconBaseUrlContext.Provider value={container.dataset.iconBaseUrl || null}>
-            <App graphData={data} />
+            <App initial={initial} fileDrop={fileDrop} />
           </IconBaseUrlContext.Provider>
         </I18nextProvider>,
       );
@@ -62,8 +73,8 @@ function autoMount(root = document) {
     : scope.querySelector('#openlineage-visualizer');
   if (!container) return;
   // Multi-mode is initialised explicitly via `init(config)`; auto-mount only
-  // handles the single-mode embed via data-json-url.
-  if (!container.dataset.jsonUrl) return;
+  // handles the single-mode embed via data-json-url or data-file-drop.
+  if (!container.dataset.jsonUrl && !fileDropEnabled(container)) return;
   mountSingle(container);
 }
 

@@ -36,5 +36,16 @@
     "expandUpstream_other": "Die {{count}} Datenprodukte zeigen, die dieses speisen",
     "expandDownstream_one": "Das Datenprodukt zeigen, das dieses nutzt",
     "expandDownstream_other": "Die {{count}} Datenprodukte zeigen, die dieses nutzen"
+  },
+  "drop": {
+    "hint": "OpenLineage-JSON-Dateien hier ablegen, um sie hinzuzufügen",
+    "empty": "OpenLineage-JSON- oder NDJSON-Dateien hier ablegen",
+    "noLineage": "Keine Lineage-Events",
+    "added_one": "{{events}} Events aus 1 Datei hinzugefügt.",
+    "added_other": "{{events}} Events aus {{count}} Dateien hinzugefügt.",
+    "failed": "Keine OpenLineage-Events in {{names}} gefunden.",
+    "files_one": "1 abgelegte Datei",
+    "files_other": "{{count}} abgelegte Dateien",
+    "clear": "Entfernen"
   }
 }
