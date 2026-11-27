@@ -36,5 +36,16 @@
     "expandUpstream_other": "Visa de {{count}} dataprodukter som matar denna",
     "expandDownstream_one": "Visa dataprodukten som använder denna",
     "expandDownstream_other": "Visa de {{count}} dataprodukter som använder denna"
+  },
+  "drop": {
+    "hint": "Släpp OpenLineage-JSON-filer för att lägga till dem",
+    "empty": "Släpp OpenLineage-JSON- eller NDJSON-filer här",
+    "noLineage": "Inga lineage-händelser",
+    "added_one": "Lade till {{events}} händelser från 1 fil.",
+    "added_other": "Lade till {{events}} händelser från {{count}} filer.",
+    "failed": "Kunde inte läsa OpenLineage-händelser från {{names}}.",
+    "files_one": "1 släppt fil",
+    "files_other": "{{count}} släppta filer",
+    "clear": "Rensa"
   }
 }

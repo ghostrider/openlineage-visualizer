@@ -218,17 +218,36 @@ export function mergeGraphs(perProductGraphs) {
   return { graph: [...byId.values()] };
 }
 
-export function parseResponse(text) {
+// A run event needs these to be placed in the graph; anything else in a file is skipped.
+export function isRunEvent(e) {
+  return !!(e && typeof e === 'object'
+    && e.job && e.job.namespace && e.job.name
+    && e.run && e.run.runId);
+}
+
+// Read lineage from the text of a response or a file. Returns `{ graph }` for a precomputed graph, else
+// `{ events, skipped }`: the run events of a JSON array, a single event, an `{ events: [...] }` wrapper or NDJSON,
+// and how many entries were not run events. Throws when the text is neither JSON nor NDJSON.
+export function parseLineage(text) {
+  let items;
   try {
     const data = JSON.parse(text);
-    if (data.graph) return data;
-    if (Array.isArray(data)) return openLineageToGraph(data);
+    if (data && data.graph) return { graph: data.graph };
+    if (Array.isArray(data)) items = data;
+    else if (data && Array.isArray(data.events)) items = data.events;
+    else items = [data];
   } catch {
-    // NDJSON
+    items = text
+      .split('\n')
+      .filter((l) => l.trim())
+      .map((l) => JSON.parse(l));
   }
-  const events = text
-    .split('\n')
-    .filter((l) => l.trim())
-    .map((l) => JSON.parse(l));
-  return openLineageToGraph(events);
+  const events = items.filter(isRunEvent);
+  return { events, skipped: items.length - events.length };
+}
+
+export function parseResponse(text) {
+  const parsed = parseLineage(text);
+  if (parsed.graph) return parsed;
+  return openLineageToGraph(parsed.events);
 }
